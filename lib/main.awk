@@ -1,7 +1,6 @@
 #! /usr/bin/awk -f
 
-# --- Representation of Lisp data
-
+# Section: Representation of Lisp data
 BEGIN {
     a_number = 0
     pair_ptr = a_pair = 1
@@ -111,6 +110,7 @@ function gc(the_car, the_cdr,   p, i)
         pair_limit += 4 * heap_increment
     }
 }
+# EndSection
 
 # Section: setting up
 
