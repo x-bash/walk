@@ -112,7 +112,7 @@ function gc(the_car, the_cdr,   p, i)
     }
 }
 
-# --- Set up
+# Section: setting up
 
 BEGIN {
     srand()
@@ -174,8 +174,9 @@ BEGIN {
 
     DRIVER      = string_to_symbol("top-level-driver")
 }
+# EndSection
 
-# --- The interpreter
+# Section: interpreter
 
 BEGIN {
     for (;;) {
@@ -338,7 +339,9 @@ function listify_args(          p, result)
     return result
 }
 
-# --- The environment
+# EndSection
+
+# Section: environment
 # The current environment is represented by the set of values
 # value[sym] where sym is a symbol.  extend_env(vars) adds a new
 # set of bindings for vars, saving the old values; unwind_env(vars)
@@ -371,9 +374,9 @@ function unwind_env(vars,       p)
         ++p
     }
 }
+# EndSection
 
-# --- Output
-
+# Section: Output
 function print_expr(expr)
 {
     write_expr(expr)
@@ -404,9 +407,9 @@ function write_expr(expr)
         printf(")")
     }
 }
+# EndSection
 
-# --- Input
-
+# Section: Input
 function read(          committed,      result)
 {
     skip_blanks()
@@ -476,8 +479,9 @@ function advance()
     else
         error("Lexical error starting at " line)
 }
+# EndSection
 
-# --- Miscellany
+# Section: Miscellany
 
 # Destructively reverse :list and append :reversed_head.
 function nreverse(list, reversed_head,          tail)
@@ -498,3 +502,4 @@ function error(reason)
     print "ERROR: " reason >"/dev/stderr"
     exit(1)
 }
+# EndSection
