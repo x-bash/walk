@@ -176,7 +176,6 @@ BEGIN {
 # EndSection
 
 # Section: interpreter
-
 BEGIN {
     for (;;) {
         if (DRIVER in value && value[DRIVER] != NIL)
