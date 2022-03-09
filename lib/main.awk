@@ -53,7 +53,9 @@ function def_prim(name, nparams,        sym)
     return value[sym]
 }
 
-# --- Garbage collection
+# EndSection
+
+# Section: Garbage collection
 
 # Make a new pair.
 function cons(the_car, the_cdr)
