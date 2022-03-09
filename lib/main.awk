@@ -113,7 +113,6 @@ function gc(the_car, the_cdr,   p, i)
 # EndSection
 
 # Section: setting up
-
 BEGIN {
     srand()
 
