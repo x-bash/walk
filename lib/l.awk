@@ -28,7 +28,7 @@ function l_str_to_sym( str ){
 
 function l_def_prim( name, nparam,   _sym, v ){
     _sym = l_str_to_sym( name )
-    v = string_to_symbol(sprintf("#<Primitive %s>", name))
+    v = l_str_to_sym( sprintf("#<Primitive %s>", name) )
     L_SYM_VALUE[ _sym ] = v
     if (nparam != "") L_SYM_NPARAM[ v ] = nparam
     return v
