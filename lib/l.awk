@@ -112,17 +112,20 @@ BEGIN{
 
     # TOKENIZE_REGEX = "[()'.]" "|" "[_A-Za-z0-9=!@$%&*<>?+\\-*/:]+" "|" "[ \\t]+" "|" ""
     L_REGEX = l_regex_or( "[()'.]", "[_A-Za-z0-9=!@$%&*<>?+\\-*/:]+" )
-    L_REGEX = l_regex_or(TOKENIZE_REGEX, L_REGEX_SPACE)
-    L_REGEX = l_regex_or(TOKENIZE_REGEX, ";")
+    L_REGEX = l_regex_or(L_REGEX, L_REGEX_SPACE)
+    L_REGEX = l_regex_or(L_REGEX, ";")
 
     L_REGEX_REDUNDANT = "([ \\t]*[\n]+)+"
+
+    L_REGEX_TRIM = l_regex_or( "^[\n]+", "[\n]+$" )
 }
 
 function l_interpreter_tokenize( astr, tokenarr){
+    # print L_REGEX
     gsub( L_REGEX, "&\n", astr )
     gsub( L_REGEX_REDUNDANT, "\n", astr)
     # gsub( L_REGEX_SPACE, "\n", astr)
-    # gsub( /[\n]+/, "\n", astr)
+    gsub( L_REGEX_TRIM , "", astr)
     return split( astr, tokenarr, "\n")
 }
 
@@ -134,5 +137,5 @@ function l_interpreter_advance(){
 
 {
     l = l_interpreter_tokenize( $0, arr )
-    for (i=1; i<=l; ++i) arr[i]
+    for (i=1; i<=l; ++i)    print arr[i]
 }
