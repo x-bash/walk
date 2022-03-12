@@ -9,9 +9,46 @@ BEGIN {
     L_TYPE_NAME[ L_A_PAIR ] = "pair"
     L_TYPE_NAME[ L_A_SYM ] = "symbol"
 }
+
+function l_is(type, expr) {
+    if (expr % 4 != type)
+        error("Expected a " type_name[type] ", not a " type_name[expr % 4])
+    return expr
+}
+
+function l_expect(type, expr) {
+    if (expr % 4 != type)
+        error("Expected a " type_name[type] ", not a " type_name[expr % 4])
+    return expr
+}
+
+function l_is_number(expr)        { return expr % 4 == 0 }
+function l_is_pair(expr)          { return expr % 4 == 1 }
+function l_is_symbol(expr)        { return expr % 4 == 2 }
+function l_is_atom(expr)          { return expr % 4 != 1 }
+
+function make_number(n)         { return n * 4 }
+
+function numeric_value(expr)
+{
+    if (expr % 4 != 0) error("Not a number")
+    return expr / 4
+}
+
 # EndSection
 
 # Section: utils
+function panic( code, msg ) {
+    print msg > "/dev/stderr"
+    exit( code )
+}
+
+function panic_never( ) {
+    panic(1, "Expecting NEVER reach this line.")
+}
+# EndSection
+
+# Section: symbol definnition
 BEGIN{
     L_SYM_PTR = 0
     # L_SYM_INTERN
@@ -101,6 +138,12 @@ BEGIN{
 }
 # EndSection
 
+# Section: Memory Engine And GC
+
+
+
+# EndSection
+
 # Section: tokeninzed & Interpreter
 
 function l_regex_or(p0, p1){
@@ -109,6 +152,8 @@ function l_regex_or(p0, p1){
 
 BEGIN{
     L_REGEX_SPACE = "[ \\t]+"
+
+    L_REGEX_NUMBER = "^[-+]?[0-9]+$"
 
     # TOKENIZE_REGEX = "[()'.]" "|" "[_A-Za-z0-9=!@$%&*<>?+\\-*/:]+" "|" "[ \\t]+" "|" ""
     L_REGEX = l_regex_or( "[()'.]", "[_A-Za-z0-9=!@$%&*<>?+\\-*/:]+" )
@@ -130,6 +175,72 @@ function l_interpreter_tokenize( astr, tokenarr){
 }
 
 function l_interpreter_advance(){
+
+}
+
+# EndSection
+
+# Section: read
+
+BEGIN{
+    L_TOKEN_ARR[0] = 1
+
+    L_TOKEN_ARR_START = "\001"
+
+    false = 0
+    true = 1
+}
+
+function l_read( committed, token_arr, start,     _token, _result, i ){
+    i = start
+    _token = token_arr[ i ]
+
+    if (token == L_EOF) {
+        if ( committed == true ) {
+            printf "Unexepected EOF" >>"/dev/stderr"
+            exit(1)
+        }
+        return THE_EOF_OBJECT
+    }
+
+    if (token == "(") {
+        _result = L_S_NIL
+        i += 1
+        while (true) {
+            _token = token_arr[ i ]
+            if (_token == ".") {
+                i = l_read( true, token_arr, i+1 )
+                _after_dot = L_READ_RESULT
+
+                _token = token_arr[ i ]
+                if ( _token == ")" ) {
+                    L_READ_RESULT = l_nreverse( _result, L_S_NIL )
+                    return i+1
+                }
+            } else if (_token == ")") {
+                L_READ_RESULT = l_nreverse( _result, L_S_NIL )
+                return i+1
+            } else {
+                # l_protect( _result )
+                i = l_read( true, token_arr, i+1 )
+                _result = l_cons( L_READ_RESULT, _result )
+                # l_unprotect()
+            }
+        }
+        panic_never()
+    }
+
+    if (token ~ L_REGEX_NUMBER) {
+        L_READ_RESULT = l_make_number( _token )
+        return start + 1
+    }
+
+    L_READ_RESULT = l_str_to_sym( _token )
+    return start + 1
+
+}
+
+function l_goeval( token_arr ){
 
 }
 
