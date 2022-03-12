@@ -1,13 +1,13 @@
 
 # Section: REPR of LISP DATA
 BEGIN {
-    L_A_NUMBER = 0
-    L_PAIR_PTR = L_A_PAIR = 1
-    L_SYM_PTR = L_A_SYM = 2
+    L_T_NUM = 0
+    L_PAIR_PTR = L_T_PAIR = 1
+    L_SYM_PTR = L_T_SYM = 2
 
-    L_TYPE_NAME[ L_A_NUMBER ] = "number"
-    L_TYPE_NAME[ L_A_PAIR ] = "pair"
-    L_TYPE_NAME[ L_A_SYM ] = "symbol"
+    L_TYPE_NAME[ L_T_NUM ] = "number"
+    L_TYPE_NAME[ L_T_PAIR ] = "pair"
+    L_TYPE_NAME[ L_T_SYM ] = "symbol"
 }
 
 function l_is(type, expr) {
@@ -79,7 +79,7 @@ BEGIN {
 
     L_FRAME_PTR = L_STACK_PTR = 0
     if (L_HEAP_INCREMENT == "")     L_HEAP_INCREMENT = 1500
-    L_PAIR_LIMIT = L_A_PAIR + 4 * L_HEAP_INCREMENT
+    L_PAIR_LIMIT = L_T_PAIR + 4 * L_HEAP_INCREMENT
 
     L_S_NIL             = l_str_to_sym("nil");          L_SYM_VALUE[ L_S_NIL ]  = L_S_NIL
     L_S_T               = l_str_to_sym("t");            L_SYM_VALUE[ L_S_T ]    = L_S_T

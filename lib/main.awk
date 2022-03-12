@@ -39,6 +39,8 @@ function string_to_symbol(string)
     symbol_ptr += 4
     intern[string] = symbol_ptr
     printname[symbol_ptr] = string
+
+    show( sprintf("---> %s : %s", symbol_ptr, string) )
     return symbol_ptr
 }
 
@@ -60,6 +62,7 @@ function def_prim(name, nparams,        sym)
 # Make a new pair.
 function cons(the_car, the_cdr)
 {
+    show("car/cdr" "\t" the_car "\t" the_cdr)
     while (pair_ptr in marks) {
         delete marks[pair_ptr]
         pair_ptr += 4
@@ -421,6 +424,7 @@ function read(          committed,      result)
     if (token == "(") {                 # read a list
         advance()
         result = NIL
+        show_name( "Start token/(", result )
         for (;;) {
             skip_blanks()
             if (token == ".") {
@@ -433,10 +437,13 @@ function read(          committed,      result)
                 return nreverse(result, after_dot)
             } else if (token == ")") {
                 advance()
+                show_name( "result token/)", result )
                 return nreverse(result, NIL)
             } else {
                 protect(result)
+                show("token: --- " token)
                 result = cons(read(1), result)
+                show_name( "for token", result )
                 unprotect()
             }
         }
@@ -483,9 +490,19 @@ function advance()
 
 # Section: Miscellany
 
+function show( str ){
+    print str >"/dev/stderr"
+}
+
+function show_name( msg, code ){
+    print "[" code ": " printname[code] "] --- " msg >"/dev/stderr"
+}
+
 # Destructively reverse :list and append :reversed_head.
 function nreverse(list, reversed_head,          tail)
 {
+    show( "nreverse - list: " list )
+    show( "nreverse - reversed_head: " reversed_head )
     while (is_pair(list)) {             #** speed?
         tail = cdr[list]
         cdr[list] = reversed_head
