@@ -1,6 +1,5 @@
 
 # Section: tokeninzed & Interpreter
-
 function l_regex_or(p0, p1){
     return p0 "|" p1
 }
@@ -28,26 +27,6 @@ function l_interpreter_tokenize( astr, tokenarr){
     gsub( L_REGEX_TRIM , "", astr)
     return split( astr, tokenarr, "\n")
 }
-
-function l_interpreter_advance(){
-
-}
-
-# EndSection
-
-# Section: Construction
-
-function l_expr( _token ) {
-
-}
-
-function l_expr_con( head, tail ) {
-    L_PAIR_PTR += 4
-    L_EXPR_CAR[ L_PAIR_PTR ] = head
-    L_EXPR_CDR[ L_PAIR_PTR ] = tail
-}
-
-
 # EndSection
 
 # Section: Using recursive to l_expr_eval
