@@ -180,6 +180,19 @@ function l_interpreter_advance(){
 
 # EndSection
 
+# Section: Construction
+
+function l_expr( storage, storage_ptr, _token ) {
+
+}
+
+function l_construct_expr( arr, arrl,   _token ) {
+    for (i=1; i<=arr; ++i) {
+        _token =
+    }
+}
+
+# EndSection
 
 {
     l = l_interpreter_tokenize( $0, arr )
