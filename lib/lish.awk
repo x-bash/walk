@@ -37,7 +37,20 @@ function panic_if_not( token, expect_char, msg ) {
 
 # Section: Using recursive to l_expr_eval
 
-function l_expr_evall(){
+function l_expr_cal( op, args, argl, _result ){
+
+    if (op == "+") {
+        _result = 0
+        for (i=1; i<=argl; ++i) _result += args[i]
+        return _result
+    }
+
+    if (op == "-") {
+        if (argl == 1)  return - args[1]
+        _result = args[1]
+        for (i=2; i<=argl; ++i) _result -= args[i]
+        return _result
+    }
 
 }
 
@@ -60,6 +73,8 @@ function l_expr_eval( arr, arrl, start, args, argl, i, o, _token, _with_bracket 
 
         # Eval macro
         _func_body_start = i
+
+        return
     }
 
     argl = 0
@@ -67,10 +82,11 @@ function l_expr_eval( arr, arrl, start, args, argl, i, o, _token, _with_bracket 
         _token = arr[ i ]
         if (_token == "(") {
             i = l_expr_eval( arr, arrl, i )
-            args[ ++argl ] =
+            args[ ++argl ] = L_EXPR_EVAL_RETURN
             continue
         }
         if (_token == ")") {
+            l_expr_cal( o, args, argl  )
             return i+1
         }
     }
